@@ -23,11 +23,11 @@ class _HomePageState extends State<HomePage> {
     '구간 2차 - 강원도 철원',
   ];
   static List<DateTime> firstDate = [
-    DateTime(2023, 2, 24),
-    DateTime(2023, 3, 11),
-    DateTime(2023, 6, 22),
-    DateTime(2023, 4, 1),
-    DateTime(2023, 5, 23),
+    DateTime.utc(2023, 2, 24),
+    DateTime.utc(2023, 3, 11),
+    DateTime.utc(2023, 6, 22),
+    DateTime.utc(2023, 4, 1),
+    DateTime.utc(2023, 5, 23),
   ];
   static List<DateTime> lastDate = [
     DateTime.utc(2023, 2, 28),
@@ -58,7 +58,10 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     String formatDate = DateFormat('yy/MM/dd').format(now);
-    Duration diff = now.difference(firstDate[0]);
+    eventData.sort((a, b) {
+      return b.firstDate.compareTo(a.firstDate);
+    });
+
     return Scaffold(
       backgroundColor: gBackgroundColor,
       body: ListView.builder(
