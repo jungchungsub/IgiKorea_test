@@ -23,11 +23,11 @@ class _HomePageState extends State<HomePage> {
     '구간 2차 - 강원도 철원',
   ];
   static List<DateTime> firstDate = [
-    DateTime.utc(2023, 2, 24),
-    DateTime.utc(2023, 3, 11),
-    DateTime.utc(2023, 6, 22),
-    DateTime.utc(2023, 4, 1),
-    DateTime.utc(2023, 5, 23),
+    DateTime(2023, 2, 24),
+    DateTime(2023, 3, 11),
+    DateTime(2023, 6, 22),
+    DateTime(2023, 4, 1),
+    DateTime(2023, 5, 23),
   ];
   static List<DateTime> lastDate = [
     DateTime.utc(2023, 2, 28),
@@ -58,7 +58,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     String formatDate = DateFormat('yy/MM/dd').format(now);
-
+    Duration diff = now.difference(firstDate[0]);
     return Scaffold(
       backgroundColor: gBackgroundColor,
       body: ListView.builder(
@@ -90,21 +90,58 @@ class _HomePageState extends State<HomePage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Container(
-                            height: 20,
-                            width: 40,
-                            decoration: BoxDecoration(
-                              color: gEventProgressColor,
-                              borderRadius: BorderRadius.circular(14),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "예정",
-                                style: TextStyle(
-                                    color: gEventTextColor, fontSize: 9),
+                          if (now.isAfter(eventData[index].firstDate) ==
+                                  false &&
+                              now.isAfter(eventData[index].lastDate) == false)
+                            Container(
+                              height: 20,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: gEventScheduleColor,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "예정",
+                                  style: TextStyle(
+                                      color: gEventTextColor, fontSize: 9),
+                                ),
                               ),
                             ),
-                          ),
+                          if (now.isAfter(eventData[index].firstDate) == true &&
+                              now.isAfter(eventData[index].lastDate) == false)
+                            Container(
+                              height: 20,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: gEventProgressColor,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "진행중",
+                                  style: TextStyle(
+                                      color: gEventTextColor, fontSize: 9),
+                                ),
+                              ),
+                            ),
+                          if (now.isAfter(eventData[index].firstDate) == true &&
+                              now.isAfter(eventData[index].lastDate) == true)
+                            Container(
+                              height: 20,
+                              width: 40,
+                              decoration: BoxDecoration(
+                                color: gEventEndColor,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: const Center(
+                                child: Text(
+                                  "종료",
+                                  style: TextStyle(
+                                      color: gEventTextColor, fontSize: 9),
+                                ),
+                              ),
+                            ),
                           SizedBox(height: 7),
                           Text(
                             eventData[index].name,
@@ -119,11 +156,6 @@ class _HomePageState extends State<HomePage> {
                             style:
                                 TextStyle(color: gSubTextColor, fontSize: 12),
                           ),
-                          // Text(
-                          //   formatDate,
-                          //   style:
-                          //       TextStyle(color: gSubTextColor, fontSize: 12),
-                          // ),
                         ],
                       ),
                     ),
