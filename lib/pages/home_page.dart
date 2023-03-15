@@ -13,6 +13,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  //현재 날짜 불러옴
   var now = DateTime.now();
 
   static List<String> eventMain = [
@@ -58,6 +59,8 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     String formatDate = DateFormat('yy/MM/dd').format(now);
+
+    //첫날짜 순으로 치환
     eventData.sort((a, b) {
       return b.firstDate.compareTo(a.firstDate);
     });
@@ -76,16 +79,20 @@ class _HomePageState extends State<HomePage> {
                   borderRadius: BorderRadius.circular(14),
                 ),
                 height: 126,
+                width: 324,
                 child: Row(
                   children: [
                     Padding(
                       padding:
                           const EdgeInsets.only(top: 8, bottom: 8, left: 5),
-                      child: Image.asset(
-                        eventData[index].imagePath,
-                        fit: BoxFit.cover,
-                        height: 110,
-                        width: 126,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(15),
+                        child: Image.asset(
+                          eventData[index].imagePath,
+                          fit: BoxFit.cover,
+                          height: 110,
+                          width: 126,
+                        ),
                       ),
                     ),
                     Padding(
@@ -96,55 +103,13 @@ class _HomePageState extends State<HomePage> {
                           if (now.isAfter(eventData[index].firstDate) ==
                                   false &&
                               now.isAfter(eventData[index].lastDate) == false)
-                            Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: gEventScheduleColor,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "예정",
-                                  style: TextStyle(
-                                      color: gEventTextColor, fontSize: 9),
-                                ),
-                              ),
-                            ),
+                            _buildProcessBox(gEventScheduleColor, "예정"),
                           if (now.isAfter(eventData[index].firstDate) == true &&
                               now.isAfter(eventData[index].lastDate) == false)
-                            Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: gEventProgressColor,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "진행중",
-                                  style: TextStyle(
-                                      color: gEventTextColor, fontSize: 9),
-                                ),
-                              ),
-                            ),
+                            _buildProcessBox(gEventProgressColor, "진행중"),
                           if (now.isAfter(eventData[index].firstDate) == true &&
                               now.isAfter(eventData[index].lastDate) == true)
-                            Container(
-                              height: 20,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: gEventEndColor,
-                                borderRadius: BorderRadius.circular(14),
-                              ),
-                              child: const Center(
-                                child: Text(
-                                  "종료",
-                                  style: TextStyle(
-                                      color: gEventTextColor, fontSize: 9),
-                                ),
-                              ),
-                            ),
+                            _buildProcessBox(gEventEndColor, "종료"),
                           SizedBox(height: 7),
                           Text(
                             eventData[index].name,
@@ -167,6 +132,23 @@ class _HomePageState extends State<HomePage> {
               ),
             );
           }),
+    );
+  }
+
+  Widget _buildProcessBox(Color gcolor, String title) {
+    return Container(
+      height: 20,
+      width: 40,
+      decoration: BoxDecoration(
+        color: gcolor,
+        borderRadius: BorderRadius.circular(14),
+      ),
+      child: Center(
+        child: Text(
+          "${title}",
+          style: TextStyle(color: gEventTextColor, fontSize: 9),
+        ),
+      ),
     );
   }
 }
